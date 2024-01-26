@@ -33,6 +33,9 @@ interface IConfigTypes {
     routes?: IConfigTypes['routes'];
     wrappers?: (Array<string> | undefined);
 } | { [x: string]: any }>;
+    routeLoader: {
+    moduleType: "esm" | "cjs";
+};
     reactRouter5Compat: boolean | {
 
 };
@@ -83,12 +86,13 @@ interface IConfigTypes {
     targets: { [x: string]: any };
     svgr: { [x: string]: any };
     svgo: { [x: string]: any } | boolean;
+    stylusLoader: { [x: string]: any };
     styleLoader: { [x: string]: any };
     srcTranspilerOptions: {
     esbuild?: ({ [x: string]: any } | undefined);
     swc?: ({ [x: string]: any } | undefined);
 };
-    srcTranspiler: "babel" | "esbuild" | "swc" | "none";
+    srcTranspiler: "babel" | "esbuild" | "swc";
     sassLoader: { [x: string]: any };
     runtimePublicPath: {
 
@@ -153,6 +157,7 @@ interface IConfigTypes {
     failOnHint?: (boolean | undefined);
     patterns?: (Array<string> | undefined);
 };
+    cssPublicPath: string;
     cssMinifierOptions: { [x: string]: any };
     cssMinifier: "cssnano" | "esbuild" | "parcelCSS" | "none";
     cssLoaderModules: { [x: string]: any };
@@ -176,6 +181,7 @@ interface IConfigTypes {
 };
     exportStatic: {
     extraRoutePaths?: (((...args: any[]) => unknown) | Array<string> | undefined);
+    ignorePreRenderError?: (boolean | undefined);
 };
     favicons: Array<string>;
     helmet: boolean;
@@ -277,15 +283,21 @@ interface IConfigTypes {
     ga_v2?: (string | undefined);
 };
     antd: {
-    configProvider?: ({ [x: string]: any } | undefined);
     dark?: (boolean | undefined);
     compact?: (boolean | undefined);
     import?: (boolean | undefined);
     style?: ("less" | "css" | undefined);
-    theme?: ({ [x: string]: any } | undefined);
+    theme?: ({
+    components: { [x: string]: { [x: string]: any } };
+} | { [x: string]: any } | undefined);
     appConfig?: ({ [x: string]: any } | undefined);
     momentPicker?: (boolean | undefined);
     styleProvider?: ({ [x: string]: any } | undefined);
+    configProvider?: ({
+    theme: {
+    components: { [x: string]: { [x: string]: any } };
+} | { [x: string]: any };
+} | { [x: string]: any } | undefined);
 };
     dva: {
     extraModels?: (Array<string> | undefined);
@@ -317,6 +329,7 @@ interface IConfigTypes {
 }> | undefined);
     shared?: ({ [x: string]: any } | undefined);
     library?: ({ [x: string]: any } | undefined);
+    remoteHash?: (boolean | undefined);
 };
     model: {
     extraModels?: (Array<string> | undefined);

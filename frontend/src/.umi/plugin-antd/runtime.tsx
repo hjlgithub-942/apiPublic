@@ -3,9 +3,7 @@
 // DO NOT CHANGE IT MANUALLY!
 import React from 'react';
 import {
-  Modal,
-  message,
-  notification,
+  ConfigProvider,
 } from 'antd';
 import { ApplyPluginsType } from 'umi';
 import { getPluginManager } from '../core/plugin';
@@ -24,13 +22,32 @@ const getAntdConfig = () => {
   return cacheAntdConfig;
 }
 
-export function rootContainer(rawContainer) {
-  const {
-    appConfig,
-    ...finalConfigProvider
-  } = getAntdConfig();
-  let container = rawContainer;
+function AntdProvider({ children }) {
+  let container = children;
+
+  const [antdConfig, _setAntdConfig] = React.useState(() => {
+    const {
+      appConfig: _,
+      ...finalConfigProvider
+    } = getAntdConfig();
+    return finalConfigProvider
+  });
+  const setAntdConfig: typeof _setAntdConfig = (newConfig) => {
+    _setAntdConfig(prev => {
+      return merge({}, prev, typeof newConfig === 'function' ? newConfig(prev) : newConfig)
+    })
+  }
+
+
 
 
   return container;
+}
+
+export function rootContainer(children) {
+  return (
+    <AntdProvider>
+      {children}
+    </AntdProvider>
+  );
 }

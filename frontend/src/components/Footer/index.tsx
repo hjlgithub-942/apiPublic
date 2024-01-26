@@ -1,7 +1,7 @@
 import { DefaultFooter } from '@ant-design/pro-components';
 
 const Footer: React.FC = () => {
-  const defaultMessage = '浙江奥智数字科技有限公司出品'
+  const defaultMessage = 'AACCZZ'
 
   const currentYear = new Date().getFullYear();
 

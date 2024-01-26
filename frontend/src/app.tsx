@@ -1,18 +1,18 @@
 import Footer from '@/components/Footer';
 import type { Settings as LayoutSettings } from '@ant-design/pro-components';
-import type { RunTimeLayoutConfig,RequestConfig } from '@umijs/max';
+import type { RunTimeLayoutConfig, RequestConfig } from '@umijs/max';
 import { history } from '@umijs/max';
 import defaultSettings from '../config/defaultSettings';
-import {requestConfig} from "@/utils/orzHttp";
-import {apiGetMyUser} from "@/services/Common/api";
+import { requestConfig } from "@/utils/orzHttp";
+import { apiGetMyUser } from "@/services/Common/api";
 import React from 'react';
 import { AvatarDropdown, AvatarName } from './components/RightContent/AvatarDropdown';
-import {IconMap} from "@/MenuIcon";
+import { IconMap } from "@/MenuIcon";
 import Icon from "@ant-design/icons";
 //5.0升级改动,moments改成dayjs，用于日期本地化
 import 'dayjs/locale/zh-cn';
 import dayjs from 'dayjs';
-import {MyUser} from "@/services/Common/typings";
+import { MyUser } from "@/services/Common/typings";
 dayjs.locale('zh-cn');
 
 const loginPath = '/user/login';
@@ -56,7 +56,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
   return {
     // actionsRender: () => [<Question key="doc" />, <SelectLang key="SelectLang" />],
     avatarProps: {
-      src: null,//initialState?.currentUser?.avatar,
+      src: 'https://avatars.githubusercontent.com/u/82198990?v=4',//initialState?.currentUser?.avatar,
       title: <AvatarName />,
       render: (_, avatarChildren) => {
         return <AvatarDropdown>{avatarChildren}</AvatarDropdown>;
@@ -79,11 +79,11 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
         return {
           ...item,
           icon:
-              typeof item.icon === 'string' && item.icon.indexOf('.svg') > -1 ? (
-                  <Icon component={IconMap[item.icon.replace('.svg', '')]} style={{ fontSize: 14 }} />
-              ) : (
-                  item.icon
-              ),
+            typeof item.icon === 'string' && item.icon.indexOf('.svg') > -1 ? (
+              <Icon component={IconMap[item.icon.replace('.svg', '')]} style={{ fontSize: 14 }} />
+            ) : (
+              item.icon
+            ),
         };
       });
     },

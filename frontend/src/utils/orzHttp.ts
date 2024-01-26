@@ -1,13 +1,13 @@
 import { request } from 'umi';
 import type { RequestConfig } from 'umi';
 import { Context, RequestOptionsInit } from "umi-request";
-import {message, notification, UploadProps} from "antd";
+import { message, notification, UploadProps } from "antd";
 import { history } from "@@/core/history";
 import * as queryString from "querystring";
 import { SortOrder } from "antd/lib/table/interface";
 import React from "react";
-import {TableData} from "@/services/Common/typings";
-import {AxiosResponse} from "axios";
+import { TableData } from "@/services/Common/typings";
+import { AxiosResponse } from "axios";
 const urlencode = require('urlencode')
 
 enum ErrorShowType {
@@ -18,9 +18,10 @@ enum ErrorShowType {
   REDIRECT = 9,
 }
 
+
 const loginPath = '/user/login';
-export function jumpLogin(){
-  if (history.location.pathname != loginPath){
+export function jumpLogin() {
+  if (history.location.pathname != loginPath) {
     history.push(loginPath);//获取失败跳转登录页
   }
 }
@@ -28,7 +29,7 @@ export function jumpLogin(){
 const DEFAULT_ERROR_PAGE = '/exception';
 let _token: any = localStorage.getItem('token') as string
 interface ErrorInfoStructure {
-  success: boolean;
+  code: number | string;
   data?: any;
   errorCode?: string;
   errorMessage?: string;
@@ -59,14 +60,15 @@ const authHeaderInterceptor = (url: string, options: RequestOptionsInit) => {
   };
 };
 
-const responseHandler = (res: AxiosResponse) :AxiosResponse=> {
+const responseHandler = (res: AxiosResponse): AxiosResponse => {
   console.log('responseHandler', res.data)
   // 拦截响应数据，进行个性化处理
   //原本的错误处理移动到errorHanlder里了，这里不需要了
   return res
 }
 
-const errorHandler = (error: RequestError, options:any) => {
+const errorHandler = (error: RequestError, options: any) => {
+  console.log('errorHandler', error)
   // @ts-ignore
   if (options?.skipErrorHandler) {
     throw error;
@@ -83,10 +85,8 @@ const errorHandler = (error: RequestError, options:any) => {
     error.info = errorInfo;
   }
   errorInfo = error.info;
-  console.log(error)
-
   if (errorInfo) {
-    const errorMessage = errorInfo?.errorMessage;
+    const errorMessage = errorInfo?.message;
     const errorCode = errorInfo?.errorCode;
     const errorPage = DEFAULT_ERROR_PAGE;
 
@@ -125,15 +125,15 @@ const errorHandler = (error: RequestError, options:any) => {
 }
 
 const errorThrower = (errorInfo: ErrorInfoStructure) => {
-  console.log('errorThrower')
-  if (errorInfo.success === false) {
+  console.log('errorThrower11', errorInfo)
+  if (errorInfo.code !== 0) {
     // 抛出错误到 errorHandler 中处理
-    if (errorInfo?.errorCode == '500001'){
+    if (errorInfo?.code == '40100') {
       jumpLogin()
       return
     }
 
-    const error: RequestError = new Error(errorInfo.errorMessage);
+    const error: RequestError = new Error(errorInfo.message);
     error.name = 'BizError';
     error.data = errorInfo.data;
     error.info = errorInfo;
@@ -150,6 +150,7 @@ export const requestConfig: RequestConfig = {
 };
 
 
+
 export const setToken = (token?: string) => {
   _token = token
   if (token) {
@@ -164,7 +165,7 @@ export const getToken = () => {
   return _token
 }
 
-export const get = async <T>(url: string, data: any, options?: { [key: string]: any }):Promise<T> => {
+export const get = async <T>(url: string, data: any, options?: { [key: string]: any }) => {
   if (data) {
     url += '?' + queryString.stringify(data)
   }
@@ -182,48 +183,47 @@ export const get = async <T>(url: string, data: any, options?: { [key: string]: 
  * @param filename 下载后的文件名，如果传空则使用服务端的文件名
  * @param options
  */
-export const download = async (url: string, data: any, filename?:string, options?: { [key: string]: any }) => {
+export const download = async (url: string, data: any, filename?: string, options?: { [key: string]: any }) => {
   if (data) {
     url += '?' + queryString.stringify(data)
   }
-  options = {...options} || {}
+  options = { ...options } || {}
   options.responseType = 'blob'
   options.getResponse = true
   options.method = 'GET'
   // console.log(options)
   const result = await request(url, options)
   const blob = result.data
-  if (blob.type.toLowerCase().indexOf('application/json') >= 0 ){
+  if (blob.type.toLowerCase().indexOf('application/json') >= 0) {
     //接口出错了
     let buffer = await blob.arrayBuffer()
     let utf8decoder = new TextDecoder()
     let json = JSON.parse(utf8decoder.decode(buffer))
-    if (!json.success && json.errorMessage){
+    if (!json.success && json.errorMessage) {
       message.error(json.errorMessage);
     }
     return
   }
 
-
-
+  // const response:Response = result.response
   const contentDisposition = result.headers['content-disposition']
   // console.log(result.data)
 
-  console.log(contentDisposition)
-  if (contentDisposition && contentDisposition.indexOf('filename*=UTF-8\'\'') > 0){
+  // console.log(contentDisposition)
+  if (contentDisposition && contentDisposition.indexOf('filename*=UTF-8\'\'') > 0) {
     // attachment; filename="????????.xlsx"; filename*=UTF-8''%E5%AE%A2%E6%88%B7%E7%94%B3%E8%B5%8E%E5%AF%BC%E5%85%A5%E6%A0%B7%E8%A1%A8.xlsx
     filename = contentDisposition.substring(contentDisposition.indexOf('filename*=UTF-8\'\'') + 'filename*=UTF-8\'\''.length)
     filename = urlencode.decode(filename)
     // console.log(filename)
   }
-  else if (contentDisposition && contentDisposition.indexOf('filename=') > 0){
+  else if (contentDisposition && contentDisposition.indexOf('filename=') > 0) {
     filename = contentDisposition.substring(contentDisposition.indexOf('filename=') + 'filename='.length)
-    // filename = new Buffer(filename, 'base64').toString('utf8')
+    filename = new Buffer(filename || '', 'base64').toString('utf8')
   }
 
   const aLink = document.createElement('a')
   document.body.appendChild(aLink)
-  aLink.style.display='none'
+  aLink.style.display = 'none'
   const objectUrl = window.URL.createObjectURL(result.data)
   aLink.href = objectUrl
   aLink.download = filename || 'file'
@@ -231,16 +231,16 @@ export const download = async (url: string, data: any, filename?:string, options
   document.body.removeChild(aLink)
 }
 
-export const getTable = async <T>(url: string, params: any, sort: Record<string, SortOrder>, filter: Record<string, React.ReactText[] | null>):Promise<TableData<T>> => {
-  const data = await get<{records:T[], total:number, current:number }>(url, { ...params, sort: JSON.stringify(sort), filter: JSON.stringify(filter) })
-  let result:TableData<T> = {data:[], page:1, success:true, total:0};
-  result.data = data.records;
-  result.total = data.total;
-  result.page = data.current;
-  return result
+export const getTable = async <T>(url: string, params: any, sort: Record<string, SortOrder>, filter: Record<string, React.ReactText[] | null>) => {
+  const tabListResult = await get<T>(url, { ...params, sort: JSON.stringify(sort), filter: JSON.stringify(filter) });
+  const result: TableData<T> = {
+    data: tabListResult.records,
+    total: tabListResult.total,
+  };
+  return result;
 }
 
-export const post = async <T>(url: string, data: any, options?: { [key: string]: any }):Promise<T> => {
+export const post = async <T>(url: string, data: any, options?: { [key: string]: any }) => {
   const result = await request(url, {
     method: 'POST',
     // requestType: 'form',
@@ -249,7 +249,7 @@ export const post = async <T>(url: string, data: any, options?: { [key: string]:
   })
   return result.data
 }
-export const postOss = async (url: string, data: any, options?: { [key: string]: any }):Promise<string> => {
+export const postOss = async <T>(url: string, data: any, options?: { [key: string]: any }) => {
   const result = await request(url, {
     method: 'POST',
     requestType: 'form',
@@ -266,16 +266,17 @@ export const postJson = async <T>(url: string, data: any, options?: { [key: stri
     data,
     ...(options || {}),
   })
+  console.log(result, '123123')
   return result.data
 }
 
 export type UploadOptions = {
-  onProgress?:()=>void
-  onSuccess?:()=>void
-  onFail?:()=>void
+  onProgress?: () => void
+  onSuccess?: () => void
+  onFail?: () => void
 }
 
-export const getUploadFileProps = (options?:UploadOptions): UploadProps=>{
+export const getUploadFileProps = (options?: UploadOptions): UploadProps => {
   const uploadprops: UploadProps = {
     name: 'file',
     headers: {
@@ -290,11 +291,11 @@ export const getUploadFileProps = (options?:UploadOptions): UploadProps=>{
       if (info.file.status === 'done') {
         const result = info.file.response
         // console.log(result)
-        if (result.success){
+        if (result.success) {
           options?.onSuccess && options.onSuccess()
           message.success(result.data?.msg || '文件上传成功！');
         }
-        else{
+        else {
           options?.onFail && options.onFail()
           message.error(info.file.response.errorMessage || '文件上传失败！');
         }

@@ -31,7 +31,7 @@ const Login: React.FC = () => {
   const myForm = useRef<any>();
 
   useEffect(() => {
-    refreshCaptcha();
+    // refreshCaptcha();
     const userName =
       localStorage.getItem('userName') == null
         ? ''
@@ -68,14 +68,16 @@ const Login: React.FC = () => {
       let pares: LoginInput = { ...values };
       delete pares.remember;
       // 登录
-      await apiLogin(pares, { skipErrorHandler: true });
+      const res = await apiLogin(pares,{
+        skipErrorHandler: true,
+      });
       message.success('登录成功！');
       success = true;
       await fetchUserInfo();
       await orzUtils.delay(0) //一定要加这个，不然currentUser会还没有设置好，变成空
       history.push('/sys_admin/index');
     } catch (error) {
-      refreshCaptcha();
+      // refreshCaptcha();
       const e = error as RequestError;
       console.log(e.stack)
       setLoginError(e.message.toString());
@@ -114,7 +116,7 @@ const Login: React.FC = () => {
           {type === 'account' && (
             <>
               <ProFormText
-                name="userName"
+                name="userAccount"
                 fieldProps={{
                   size: 'large',
                   prefix: <UserOutlined />//className={styles.prefixIcon} />,
@@ -129,7 +131,7 @@ const Login: React.FC = () => {
               />
 
               <ProFormText.Password
-                name="password"
+                name="userPassword"
                 fieldProps={{
                   size: 'large',
                   prefix: <LockOutlined />// className={styles.prefixIcon} />,
@@ -143,13 +145,12 @@ const Login: React.FC = () => {
                 ]}
               />
 
-              <Form.Item
+              {/* <Form.Item
                 className="formpwdItem"
                 name="code"
                 rules={[{ required: true, message: '请填写验证码！' }]}
               >
                 <div>
-                  {/*className={styles.getCode}>*/}
                   <Input
                     style={{ width: '70%' }}
                     size="large"
@@ -160,7 +161,7 @@ const Login: React.FC = () => {
                   &nbsp;
                   <img style={{ width: '28%' }} src={captchaUrl} onClick={refreshCaptcha} />
                 </div>
-              </Form.Item>
+              </Form.Item> */}
               {loginError && <LoginMessage content={loginError} />}
 
               <div

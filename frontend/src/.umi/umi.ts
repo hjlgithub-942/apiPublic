@@ -3,7 +3,7 @@
 // DO NOT CHANGE IT MANUALLY!
 import './core/polyfill';
 import 'antd/dist/reset.css';
-import { renderClient } from 'D:/javaComment/v5/node_modules/@umijs/renderer-react';
+import { renderClient } from 'F:/apiPublic/frontend/node_modules/@umijs/renderer-react';
 import { getRoutes } from './core/route';
 import { createPluginManager } from './core/plugin';
 import { createHistory } from './core/history';
@@ -72,5 +72,5 @@ import './plugin-moment2dayjs/runtime.tsx'
 render();
 
 window.g_umi = {
-  version: '4.0.72',
+  version: '4.1.1',
 };

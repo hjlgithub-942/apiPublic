@@ -4,7 +4,7 @@
 import React from 'react';
 
 export async function getRoutes() {
-  const routes = {"1":{"path":"/user","layout":false,"id":"1"},"2":{"path":"/user","parentId":"1","id":"2"},"3":{"name":"登录","path":"/user/login","parentId":"2","id":"3"},"4":{"path":"/sys_admin/index","name":"首页","icon":"HomeOutlined","role":"sys_admin","parentId":"ant-design-pro-layout","id":"4"},"5":{"path":"/sys_admin/notice","name":"系统公告","icon":"NotificationOutlined","role":"sys_admin","access":"routeFilter","parentId":"ant-design-pro-layout","id":"5"},"6":{"path":"/sys_admin/organization","name":"组织管理","icon":"ProfileOutlined","role":"sys_admin","access":"routeFilter","parentId":"ant-design-pro-layout","id":"6"},"7":{"path":"/sys_admin/permission","name":"菜单管理","icon":"MenuOutlined","role":"sys_admin","access":"routeFilter","parentId":"ant-design-pro-layout","id":"7"},"8":{"path":"/sys_admin/role","name":"角色管理","icon":"NodeIndexOutlined","role":"sys_admin","access":"routeFilter","parentId":"ant-design-pro-layout","id":"8"},"9":{"path":"/sys_admin/user","name":"账户管理","icon":"UsergroupDeleteOutlined","role":"sys_admin","access":"routeFilter","parentId":"ant-design-pro-layout","id":"9"},"10":{"path":"/sys_admin/department","name":"部门管理","icon":"IdcardOutlined","role":"sys_admin","access":"routeFilter","parentId":"ant-design-pro-layout","id":"10"},"11":{"path":"/Demo","name":"Demo管理(svg图标)","icon":"product.svg","role":"sys_admin","parentId":"ant-design-pro-layout","id":"11"},"12":{"path":"/Demo/list","name":"列表","parentId":"11","id":"12"},"13":{"path":"/Demo/download","name":"上传下载","parentId":"11","id":"13"},"14":{"path":"*","parentId":"ant-design-pro-layout","id":"14"},"ant-design-pro-layout":{"id":"ant-design-pro-layout","path":"/","isLayout":true},"umi/plugin/openapi":{"path":"/umi/plugin/openapi","id":"umi/plugin/openapi"}} as const;
+  const routes = {"1":{"path":"/user","layout":false,"id":"1"},"2":{"path":"/user","parentId":"1","id":"2"},"3":{"name":"登录","path":"/user/login","parentId":"2","id":"3"},"4":{"path":"/sys_admin/index","name":"首页","icon":"HomeOutlined","role":"sys_admin","parentId":"ant-design-pro-layout","id":"4"},"5":{"icon":"ApiOutlined","path":"/api_public/apiList","name":"api接口列表","parentId":"ant-design-pro-layout","id":"5"},"6":{"path":"*","parentId":"ant-design-pro-layout","id":"6"},"ant-design-pro-layout":{"id":"ant-design-pro-layout","path":"/","isLayout":true},"umi/plugin/openapi":{"path":"/umi/plugin/openapi","id":"umi/plugin/openapi"}} as const;
   return {
     routes,
     routeComponents: {
@@ -12,18 +12,10 @@ export async function getRoutes() {
 '2': React.lazy(() => import( './EmptyRoute')),
 '3': React.lazy(() => import(/* webpackChunkName: "p__user__Login__index" */'@/pages/user/Login/index.tsx')),
 '4': React.lazy(() => import(/* webpackChunkName: "p__sys_admin__Index__index" */'@/pages/sys_admin/Index/index.tsx')),
-'5': React.lazy(() => import(/* webpackChunkName: "p__sys_admin__Notice__index" */'@/pages/sys_admin/Notice/index.tsx')),
-'6': React.lazy(() => import(/* webpackChunkName: "p__sys_admin__Organization__index" */'@/pages/sys_admin/Organization/index.tsx')),
-'7': React.lazy(() => import(/* webpackChunkName: "p__sys_admin__Permission__index" */'@/pages/sys_admin/Permission/index.tsx')),
-'8': React.lazy(() => import(/* webpackChunkName: "p__sys_admin__Role__index" */'@/pages/sys_admin/Role/index.tsx')),
-'9': React.lazy(() => import(/* webpackChunkName: "p__sys_admin__User__index" */'@/pages/sys_admin/User/index.tsx')),
-'10': React.lazy(() => import(/* webpackChunkName: "p__sys_admin__Department__index" */'@/pages/sys_admin/Department/index.tsx')),
-'11': React.lazy(() => import( './EmptyRoute')),
-'12': React.lazy(() => import(/* webpackChunkName: "p__Demo__list__index" */'@/pages/Demo/list/index.tsx')),
-'13': React.lazy(() => import(/* webpackChunkName: "p__Demo__download__index" */'@/pages/Demo/download/index.tsx')),
-'14': React.lazy(() => import(/* webpackChunkName: "p__404" */'@/pages/404.tsx')),
-'ant-design-pro-layout': React.lazy(() => import(/* webpackChunkName: "umi__plugin-layout__Layout" */'D:/javaComment/v5/src/.umi/plugin-layout/Layout.tsx')),
-'umi/plugin/openapi': React.lazy(() => import(/* webpackChunkName: "umi__plugin-openapi__openapi" */'D:/javaComment/v5/src/.umi/plugin-openapi/openapi.tsx')),
+'5': React.lazy(() => import(/* webpackChunkName: "p__api_public__apiList__index" */'@/pages/api_public/apiList/index.tsx')),
+'6': React.lazy(() => import(/* webpackChunkName: "p__404" */'@/pages/404.tsx')),
+'ant-design-pro-layout': React.lazy(() => import(/* webpackChunkName: "umi__plugin-layout__Layout" */'F:/apiPublic/frontend/src/.umi/plugin-layout/Layout.tsx')),
+'umi/plugin/openapi': React.lazy(() => import(/* webpackChunkName: "umi__plugin-openapi__openapi" */'F:/apiPublic/frontend/src/.umi/plugin-openapi/openapi.tsx')),
 },
   };
 }

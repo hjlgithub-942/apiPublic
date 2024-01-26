@@ -19,17 +19,20 @@ export default [
     ],
   },
   { path: '/sys_admin/index', name: '首页', icon: 'HomeOutlined', component: './sys_admin/Index', role: 'sys_admin' },
-  { path: '/sys_admin/notice', name: '系统公告', icon: 'NotificationOutlined', component: './sys_admin/Notice', role: 'sys_admin', access: 'routeFilter' },
-  { path: '/sys_admin/organization', name: '组织管理', icon: 'ProfileOutlined', component: './sys_admin/Organization', role: 'sys_admin', access: 'routeFilter' },
-  { path: '/sys_admin/permission', name: '菜单管理', icon: 'MenuOutlined', component: './sys_admin/Permission', role: 'sys_admin', access: 'routeFilter'},
-  { path: '/sys_admin/role', name: '角色管理', icon: 'NodeIndexOutlined', component: './sys_admin/Role', role: 'sys_admin', access: 'routeFilter'},
-  { path: '/sys_admin/user', name: '账户管理', icon: 'UsergroupDeleteOutlined', component: './sys_admin/User', role: 'sys_admin', access: 'routeFilter'},
-  { path: '/sys_admin/department', name: '部门管理', icon: 'IdcardOutlined', component: './sys_admin/Department', role: 'sys_admin', access: 'routeFilter'},
+  { icon: 'ApiOutlined', path: '/api_public/apiList', name: 'api接口列表', component: './api_public/apiList' },
+  // { path: '/sys_admin/notice', name: '系统公告', icon: 'NotificationOutlined', component: './sys_admin/Notice', role: 'sys_admin', access: 'routeFilter' },
+  // { path: '/sys_admin/organization', name: '组织管理', icon: 'ProfileOutlined', component: './sys_admin/Organization', role: 'sys_admin', access: 'routeFilter' },
+  // { path: '/sys_admin/permission', name: '菜单管理', icon: 'MenuOutlined', component: './sys_admin/Permission', role: 'sys_admin', access: 'routeFilter' },
+  // { path: '/sys_admin/role', name: '角色管理', icon: 'NodeIndexOutlined', component: './sys_admin/Role', role: 'sys_admin', access: 'routeFilter' },
+  // { path: '/sys_admin/user', name: '账户管理', icon: 'UsergroupDeleteOutlined', component: './sys_admin/User', role: 'sys_admin', access: 'routeFilter' },
+  // { path: '/sys_admin/department', name: '部门管理', icon: 'IdcardOutlined', component: './sys_admin/Department', role: 'sys_admin', access: 'routeFilter' },
 
-  { path: '/Demo', name: 'Demo管理(svg图标)', icon: 'product.svg', role: 'sys_admin', routes: [
-      { path: '/Demo/list', name: '列表', component: './Demo/list' },
-      { path: '/Demo/download', name: '上传下载', component: './Demo/download' },
-    ],},
+  // {
+  //   path: '/Demo', name: 'Demo管理(svg图标)', icon: 'product.svg', role: 'sys_admin', routes: [
+  //     { path: '/Demo/list', name: '列表', component: './api_public/list' },
+  //     { path: '/Demo/download', name: '上传下载', component: './Demo/download' },
+  //   ],
+  // },
   {
     path: '*',
     component: './404',

@@ -27,7 +27,7 @@
         "src/.umi/*"
       ],
       "@umijs/max": [
-        "D:\\javaComment\\v5\\node_modules\\umi"
+        "F:\\apiPublic\\frontend\\node_modules\\umi"
       ],
       "@umijs/max/typings": [
         "src/.umi/typings"
