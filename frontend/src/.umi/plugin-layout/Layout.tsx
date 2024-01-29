@@ -88,7 +88,7 @@ export default (props: any) => {
   "fixedHeader": false,
   "fixSiderbar": true,
   "colorWeak": false,
-  "title": "Demo管理平台",
+  "title": "Api管理",
   "pwa": true,
   "logo": "https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg",
   "iconfontUrl": "",

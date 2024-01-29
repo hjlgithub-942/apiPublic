@@ -68,14 +68,14 @@ const Login: React.FC = () => {
       let pares: LoginInput = { ...values };
       delete pares.remember;
       // 登录
-      const res = await apiLogin(pares,{
+      const res = await apiLogin(pares, {
         skipErrorHandler: true,
       });
       message.success('登录成功！');
       success = true;
       await fetchUserInfo();
       await orzUtils.delay(0) //一定要加这个，不然currentUser会还没有设置好，变成空
-      history.push('/sys_admin/index');
+      history.push('/api_public/apiList');
     } catch (error) {
       // refreshCaptcha();
       const e = error as RequestError;
@@ -95,8 +95,8 @@ const Login: React.FC = () => {
       <div className={styles.content}>
         <LoginForm<LoginInput>
           // logo={<img alt="logo" src={'LOGD_IMG'} />}
-          title="Demo管理平台"
-          subTitle={'Demo管理平台'}
+          title="Api管理"
+          subTitle={'Api管理'}
           formRef={myForm}
           onFinish={async (values) => {
             //表单提交方法
@@ -164,7 +164,7 @@ const Login: React.FC = () => {
               </Form.Item> */}
               {loginError && <LoginMessage content={loginError} />}
 
-              <div
+              {/* <div
                 style={{
                   marginBottom: 24,
                 }}
@@ -172,7 +172,7 @@ const Login: React.FC = () => {
                 <ProFormCheckbox noStyle name="remember">
                   记住密码
                 </ProFormCheckbox>
-              </div>
+              </div> */}
             </>
           )}
         </LoginForm>

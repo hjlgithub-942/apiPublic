@@ -4,16 +4,15 @@
 import React from 'react';
 
 export async function getRoutes() {
-  const routes = {"1":{"path":"/user","layout":false,"id":"1"},"2":{"path":"/user","parentId":"1","id":"2"},"3":{"name":"登录","path":"/user/login","parentId":"2","id":"3"},"4":{"path":"/sys_admin/index","name":"首页","icon":"HomeOutlined","role":"sys_admin","parentId":"ant-design-pro-layout","id":"4"},"5":{"icon":"ApiOutlined","path":"/api_public/apiList","name":"api接口列表","parentId":"ant-design-pro-layout","id":"5"},"6":{"path":"*","parentId":"ant-design-pro-layout","id":"6"},"ant-design-pro-layout":{"id":"ant-design-pro-layout","path":"/","isLayout":true},"umi/plugin/openapi":{"path":"/umi/plugin/openapi","id":"umi/plugin/openapi"}} as const;
+  const routes = {"1":{"path":"/user","layout":false,"id":"1"},"2":{"path":"/user","parentId":"1","id":"2"},"3":{"name":"登录","path":"/user/login","parentId":"2","id":"3"},"4":{"icon":"ApiOutlined","path":"/api_public/apiList","name":"Api接口管理","parentId":"ant-design-pro-layout","id":"4"},"5":{"path":"*","parentId":"ant-design-pro-layout","id":"5"},"ant-design-pro-layout":{"id":"ant-design-pro-layout","path":"/","isLayout":true},"umi/plugin/openapi":{"path":"/umi/plugin/openapi","id":"umi/plugin/openapi"}} as const;
   return {
     routes,
     routeComponents: {
 '1': React.lazy(() => import( './EmptyRoute')),
 '2': React.lazy(() => import( './EmptyRoute')),
 '3': React.lazy(() => import(/* webpackChunkName: "p__user__Login__index" */'@/pages/user/Login/index.tsx')),
-'4': React.lazy(() => import(/* webpackChunkName: "p__sys_admin__Index__index" */'@/pages/sys_admin/Index/index.tsx')),
-'5': React.lazy(() => import(/* webpackChunkName: "p__api_public__apiList__index" */'@/pages/api_public/apiList/index.tsx')),
-'6': React.lazy(() => import(/* webpackChunkName: "p__404" */'@/pages/404.tsx')),
+'4': React.lazy(() => import(/* webpackChunkName: "p__api_public__apiList__index" */'@/pages/api_public/apiList/index.tsx')),
+'5': React.lazy(() => import(/* webpackChunkName: "p__404" */'@/pages/404.tsx')),
 'ant-design-pro-layout': React.lazy(() => import(/* webpackChunkName: "umi__plugin-layout__Layout" */'F:/apiPublic/frontend/src/.umi/plugin-layout/Layout.tsx')),
 'umi/plugin/openapi': React.lazy(() => import(/* webpackChunkName: "umi__plugin-openapi__openapi" */'F:/apiPublic/frontend/src/.umi/plugin-openapi/openapi.tsx')),
 },

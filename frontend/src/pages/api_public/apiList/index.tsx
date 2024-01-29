@@ -13,7 +13,7 @@ const Index: React.FC<{ organizationId: number }> = (props) => {
     const actionRef: any = useRef<ActionType>();
     const [modalVisible, setModalVisible] = useState<boolean>(false);
     const [formType, setFormType] = useState<FORM_TYPE>();
-    const [currentRow, setCurrentRow] = useState();
+    const [currentRow, setCurrentRow] = useState<API.InterfaceInfo>();
     const FormRef = useRef<any>();
 
     /**
@@ -29,7 +29,7 @@ const Index: React.FC<{ organizationId: number }> = (props) => {
      * 点击删除按钮
      */
     const onClickDelete = async (record: any) => {
-        await apiRemove({ ids: [record.id] })
+        await apiRemove({ id: record.id })
         actionRef.current?.reloadAndRest?.();
         message.success('删除成功');
     }
@@ -56,20 +56,24 @@ const Index: React.FC<{ organizationId: number }> = (props) => {
      * 表格确认提交
      */
     const onFormSubmit = async (value: any) => {
-        //只读为true 则表示查看详情不需要提交表单
-        if (formType == FORM_TYPE.VIEW) {
+        try {
+            //只读为true 则表示查看详情不需要提交表单
+            if (formType == FORM_TYPE.VIEW) {
+                setModalVisible(false);
+                return;
+            }
+            if (formType == FORM_TYPE.EDIT) {
+                await apiUpdate(value)
+                message.success('修改成功');
+            } else {
+                await apiAdd(value)
+                message.success('添加成功');
+            }
             setModalVisible(false);
-            return;
+            actionRef.current?.reload()
+        } catch (error) {
+
         }
-        if (formType == FORM_TYPE.EDIT) {
-            await apiUpdate(value)
-            message.success('修改成功');
-        } else {
-            await apiAdd(value)
-            message.success('添加成功');
-        }
-        setModalVisible(false);
-        actionRef.current?.reload()
     }
 
     /**
@@ -79,44 +83,80 @@ const Index: React.FC<{ organizationId: number }> = (props) => {
         setModalVisible(false);
     }
 
-    const columns: ProColumns<DemoPojo>[] = [
+    const columns: ProColumns<API.InterfaceInfo>[] = [
         {
             dataIndex: 'index',
             valueType: 'indexBorder',
             width: 48,
         },
         {
+            title: 'id',
+            dataIndex: 'id',
+            hideInForm: true, //不在表单中显示
+            ellipsis: true, //过长自动省略
+        },
+        {
             title: '接口名称',
             dataIndex: 'name',
             ellipsis: true, //过长自动省略
+            formItemProps: {
+                rules: [{
+                    required: true,
+                }]
+            }
         },
         {
             title: '接口地址',
             dataIndex: 'url',
             ellipsis: true, //过长自动省略
+            formItemProps: {
+                rules: [{
+                    required: true,
+                }]
+            }
         },
         {
             title: '描述',
             dataIndex: 'description',
             ellipsis: true, //过长自动省略
-            valueType: 'textarea'
+            valueType: 'textarea',
+            formItemProps: {
+                rules: [{
+                    required: true,
+                }]
+            }
         },
         {
             title: '请求方法',
             dataIndex: 'method',
-            ellipsis: true, //过长自动省略
+            ellipsis: true, //过长自动省略,
+            formItemProps: {
+                rules: [{
+                    required: true,
+                }]
+            }
         },
         {
             title: '请求头',
             dataIndex: 'requestHeader',
             ellipsis: true, //过长自动省略
-            valueType: 'textarea'
+            valueType: 'textarea',
+            formItemProps: {
+                rules: [{
+                    required: true,
+                }]
+            }
         },
         {
             title: '响应头',
             dataIndex: 'responseHeader',
             ellipsis: true, //过长自动省略
-            valueType: 'textarea'
+            valueType: 'textarea',
+            formItemProps: {
+                rules: [{
+                    required: true,
+                }]
+            }
         },
         {
             title: '接口状态',
@@ -126,11 +166,17 @@ const Index: React.FC<{ organizationId: number }> = (props) => {
                 0: { text: '禁用', status: 'Error' },
                 1: { text: '启用', status: 'Success' },
             },
+            formItemProps: {
+                rules: [{
+                    required: true,
+                }]
+            }
         },
         {
             title: '创建时间',
             dataIndex: 'createTime',
             valueType: 'dateTime',
+            hideInForm: true, //不在表单中显示
             search: false, //不能搜索
         },
 
@@ -142,24 +188,26 @@ const Index: React.FC<{ organizationId: number }> = (props) => {
                 let result = [
                     <a key='upData' onClick={() => onClickUpdate(record)}>修改</a>,
                     <a key='detailData' onClick={() => onClickDetail(record)}>查看</a>,
-                    <Popconfirm key='delData' title="确定要删除吗" onConfirm={() => onClickDelete(record)}> <a href='#'>删除</a></Popconfirm>
+                    <Popconfirm key='delData' title="确定要删除吗" onConfirm={() => onClickDelete(record)}> <a style={{ color: 'red' }} href='#'>删除</a></Popconfirm>
                 ]
                 return result
             },
         },
     ];
 
+
+
     return (
         <PageContainer>
             <Form
+                values={currentRow}
+                formRef={FormRef}
                 visible={modalVisible}
                 onSubmit={onFormSubmit}
                 onCancel={onFormCancel}
-                values={currentRow}
-                formRef={FormRef}
-                formType={formType}
+                columns={columns}
             />
-            <ProTable<DemoPojo, PageParams>
+            <ProTable
                 columns={columns}
                 actionRef={actionRef}
                 cardBordered

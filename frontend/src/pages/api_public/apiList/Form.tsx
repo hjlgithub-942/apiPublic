@@ -1,69 +1,42 @@
-import React, {useEffect} from 'react';
-import {ModalForm, ProForm, ProFormText, ProFormTextArea,} from '@ant-design/pro-form';
-import {DemoPojo, FORM_TYPE} from "./typings";
+import type { ProColumns, ProFormInstance } from '@ant-design/pro-components';
+import { ProTable } from '@ant-design/pro-components';
+import '@umijs/max';
+import { Modal } from 'antd';
+import React, { useEffect, useRef } from 'react';
 
-export type UpdateFormProps = {
-  formRef?:any;
-  formType?:FORM_TYPE;
+export type Props = {
+  columns: ProColumns<API.InterfaceInfo>[];
   onCancel: () => void;
-  onSubmit?: (value:any) => Promise<void>;
-  visible?: boolean;
-  values?: DemoPojo;
+  onSubmit: (values: API.InterfaceInfo) => Promise<void>;
+  visible: boolean;
+  values?: API.InterfaceInfo;
+  formRef?: any;
 };
 
-function getFormTitle(formType?:FORM_TYPE){
-  switch(formType){
-    case FORM_TYPE.ADD:
-      return '新建'
-    case FORM_TYPE.EDIT:
-      return '修改'
-    case FORM_TYPE.VIEW:
-      return '查看'
-  }
-  return ''
-}
+const CreateModal: React.FC<Props> = (props) => {
+  const { visible, columns, onCancel, onSubmit } = props;
 
+  const formRef = useRef<ProFormInstance>();
 
-const From: React.FC<UpdateFormProps> = (props) => {
-  const onVisibleChange = (value:boolean)=>{
-    if (!value){
-      props.onCancel()
-    }
-  }
-
-  useEffect(()=>{
-    if (!props || !props.visible){
-      return
-    }
-    if (props.values){
-      props.formRef?.current?.setFieldsValue(props.values)
-    }
-    else{
-      props.formRef?.current?.resetFields()
+  useEffect(() => {
+    if (formRef && props.values) {
+      formRef.current?.setFieldsValue(props.values);
+    } else {
+      formRef.current?.resetFields();
     }
   }, [props.values, props.visible])
 
   return (
-    <ModalForm
-      formRef={props.formRef}
-      title={getFormTitle(props.formType)}
-      width="800px"
-      visible={props.visible}
-      onVisibleChange={onVisibleChange}
-      onFinish={props.onSubmit}
-      initialValues={props.values}
-    >
-      <ProFormText name="id" label="编号" width="xl" hidden/>
-      <ProForm.Group>
-        <ProFormText rules={[{required: true, message: '请填写名称'}]} name="name" label="名称" width="xl" disabled={props.formType == FORM_TYPE.VIEW}/>
-      </ProForm.Group>
-
-      <ProForm.Group>
-        <ProFormTextArea name="descr" label="内容描述" width="xl" disabled={props.formType == FORM_TYPE.VIEW}/>
-      </ProForm.Group>
-
-    </ModalForm>
+    <Modal open={visible} footer={null} onCancel={() => onCancel?.()}>
+      <ProTable
+        type="form"
+        formRef={formRef}
+        columns={columns}
+        onSubmit={async (value) => {
+          onSubmit?.(value);
+        }}
+      />
+    </Modal>
   );
 };
-
-export default From;
+export default CreateModal;
